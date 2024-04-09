@@ -27,3 +27,30 @@ function moveInput()
     
     return input;
 }
+
+function mousePressed()
+{
+    if (partyIsHost())
+    {
+        rectOrigin = [mouseX, mouseY];
+        drawingRectangle = true;
+    }
+}
+
+function mouseDragged() {
+    if (drawingRectangle) {
+        curRectX = mouseX - rectOrigin[0];
+        curRectY = mouseY - rectOrigin[1];
+    }
+}
+
+function mouseReleased()
+{
+    if (partyIsHost())
+    {
+        drawingRectangle = false;
+        rectOffset = [0,0];
+        curRectX = 0;
+        curRectY = 0;
+    }
+}

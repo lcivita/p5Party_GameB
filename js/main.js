@@ -5,6 +5,12 @@ const fileMoveSpeed = 200;
 
 let maxGuestsLength = 0;
 
+let drawingRectangle = false;
+let rectOrigin = [0,0];
+// let rectOffset = [0,0];
+let curRectX = 0;
+let curRectY = 0;
+
 function setup() {
     createCanvas(800, 600);
 
@@ -52,6 +58,15 @@ function startGame() {
 function hostDraw()
 {
     updateSharedCursorPos();
+    
+    if (drawingRectangle)
+    {
+        push();
+        noFill();
+        stroke(255);
+        rect(rectOrigin[0], rectOrigin[1], curRectX, curRectY);
+        pop();
+    }
 }
 
 function updateSharedCursorPos()
@@ -83,6 +98,7 @@ function drawAllFiles()
 {
     for (let i = 1; i < maxGuestsLength; i++)
     {
+        // TODO replace circle with file icon. Make array and have your file type be linked to your role
         try
         {
             circle(shared.filePositions[parseInt(guests[i].role_keeper.role)][0], shared.filePositions[parseInt(guests[i].role_keeper.role)][1], 20);
@@ -95,5 +111,6 @@ function drawAllFiles()
 
 function drawCursor()
 {
+    // TODO replace circle with cursor
     circle(shared.cursorPosition[0], shared.cursorPosition[1], 10);
 }

@@ -17,8 +17,6 @@ function connectToParty()
         },
         onConnect
     );
-
-    // me = partyLoadMyShared({}, onConnect);
     me = partyLoadMyShared();
     guests = partyLoadGuestShareds();
     
@@ -42,9 +40,5 @@ function onConnect() {
         if (!partyIsHost()) {
             playerPos = [width - 20, 20 + me.role_keeper.role * height/16 - height/16];
         }
-
-        // TODOS
-        // check if game is in progress
-        // if not, join waiting room
     }, 200);
 }
