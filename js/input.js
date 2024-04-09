@@ -30,10 +30,11 @@ function moveInput()
 
 function mousePressed()
 {
-    if (partyIsHost())
+    if (partyIsHost() && !cageActive)
     {
         rectOrigin = [mouseX, mouseY];
         drawingRectangle = true;
+        console.log("drawing rectangle = " + drawingRectangle);
     }
 }
 
@@ -46,10 +47,10 @@ function mouseDragged() {
 
 function mouseReleased()
 {
-    if (partyIsHost())
+    if (partyIsHost() && drawingRectangle)
     {
+        createCage();
         drawingRectangle = false;
-        rectOffset = [0,0];
         curRectX = 0;
         curRectY = 0;
     }

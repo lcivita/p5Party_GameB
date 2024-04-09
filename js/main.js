@@ -11,6 +11,16 @@ let rectOrigin = [0,0];
 let curRectX = 0;
 let curRectY = 0;
 
+let cageActive = false;
+let cageTimer = 0;
+const cageActiveTime = 1;
+let curCage = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+};
+
 function setup() {
     createCanvas(800, 600);
 
@@ -49,6 +59,23 @@ function draw() {
     drawAllFiles();
     drawCursor();
     
+    if (cageActive)
+    {
+        cageTimer += deltaTime / 1000;
+        
+        push();
+        stroke(255);
+        fill(255, 255, 255, 50);
+        rect(curCage.x, curCage.y, curCage.width, curCage.height);
+        pop();
+        
+        if (cageTimer >= cageActiveTime)
+        {
+            cageActive = false;
+            cageTimer = 0;
+        }
+    }
+    
 }
 
 function startGame() {
@@ -62,7 +89,7 @@ function hostDraw()
     if (drawingRectangle)
     {
         push();
-        noFill();
+        fill(255, 255, 255, 50);
         stroke(255);
         rect(rectOrigin[0], rectOrigin[1], curRectX, curRectY);
         pop();
@@ -113,4 +140,14 @@ function drawCursor()
 {
     // TODO replace circle with cursor
     circle(shared.cursorPosition[0], shared.cursorPosition[1], 10);
+}
+
+function createCage()
+{
+    curCage.x = rectOrigin[0];
+    curCage.y = rectOrigin[1];
+    curCage.width = curRectX;
+    curCage.height = curRectY;
+    cageActive = true;
+    cageTimer = 0;
 }
