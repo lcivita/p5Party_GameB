@@ -3,7 +3,7 @@ let lastPlayerPos = [0,0];
 
 const fileMoveSpeed = 200;
 
-// let gameStarted = false;
+let maxGuestsLength = 0;
 
 function setup() {
     createCanvas(800, 600);
@@ -11,14 +11,6 @@ function setup() {
     let button = createButton('connect');
     button.position(0, height);
     button.mousePressed(connectToParty);
-    //
-    // let button2 = createButton('start game');
-    // button2.position(width/2, height);
-    // button2.mousePressed(startGame);
-    //
-    // let button3 = createButton('start game');
-    // button3.position(width/4, height);
-    // button3.mousePressed(onConnect);
     
     ellipseMode(CENTER);
 }
@@ -26,12 +18,6 @@ function setup() {
 function draw() {
     background(0);
     
-    // if (!connected) {
-    //     if (me !== undefined && me.role_keeper !== undefined && me.role_keeper.role !== undefined) {
-    //         onConnect();
-    //     }
-    //     return;
-    // }
     if (!connected) {
         return;
     }
@@ -39,6 +25,10 @@ function draw() {
     if (!shared.gameStarted)
     {
         return;
+    }
+    
+    if (guests.length > maxGuestsLength) {
+        maxGuestsLength = guests.length;
     }
     
     if (partyIsHost())
@@ -91,9 +81,15 @@ function clientDraw()
 
 function drawAllFiles()
 {
-    for (let i = 1; i < guests.length; i++)
+    for (let i = 1; i < maxGuestsLength; i++)
     {
-        circle(shared.filePositions[parseInt(guests[i].role_keeper.role)][0], shared.filePositions[parseInt(guests[i].role_keeper.role)][1], 20);
+        try
+        {
+            circle(shared.filePositions[parseInt(guests[i].role_keeper.role)][0], shared.filePositions[parseInt(guests[i].role_keeper.role)][1], 20);
+        } catch
+        {
+            
+        }
     }
 }
 

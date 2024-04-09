@@ -28,7 +28,7 @@ function connectToParty()
 function onConnect() {
     if (partyIsHost())
     {
-        let button2 = createButton('start game');
+        let button2 = createButton('(host) start game');
         button2.position(width/2, height);
         button2.mousePressed(startGame);
     }
@@ -38,7 +38,6 @@ function onConnect() {
         shared.filePositions[parseInt(me.role_keeper.role)] = playerPos;
         connected = true;
         subscribePartyEvents();
-        // shared.gameStarted = true;
 
         if (!partyIsHost()) {
             playerPos = [width - 20, 20 + me.role_keeper.role * height/16 - height/16];
