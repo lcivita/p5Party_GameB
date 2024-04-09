@@ -39,8 +39,8 @@ function mousePressed()
 
 function mouseDragged() {
     if (drawingRectangle) {
-        curRectX = mouseX - rectOrigin[0];
-        curRectY = mouseY - rectOrigin[1];
+        curRectX = constrain(mouseX - rectOrigin[0], -width/3, width/3);
+        curRectY = constrain(mouseY - rectOrigin[1], -width/3, width/3);
     }
 }
 
