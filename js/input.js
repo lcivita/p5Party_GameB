@@ -1,6 +1,10 @@
+function mod(n, m) {
+    return ((n % m) + m) % m;
+  }
+
 function updateMyPos()
 {
-    let data = [parseInt(me.role_keeper.role), playerPos[0], playerPos[1]];
+    let data = [parseInt(me.role_keeper.role), mod(playerPos[0], canvasWidth), mod(playerPos[1], canvasHeight)];
     partyEmit("filePosUpdate", data);
 }
 
@@ -25,16 +29,36 @@ function moveInput()
         input[1] /= magnitude;
     }
     
+    if(keyIsDown(SHIFT)) {
+        input[0] *= 5.0;
+        input[1] *= 5.0;
+    }
+
     return input;
 }
 
 function mousePressed()
 {
-    if (partyIsHost() && !cageActive)
+    if(mouseButton === LEFT) {
+        if(rightClicking == true) {
+            if(Math.sqrt(Math.pow(mouseX - rightClickPosition[0],2) + Math.pow(mouseY - rightClickPosition[1], 2)) < 20) {
+                deleting = true;
+            } 
+            rightClicking = false;
+        }
+    }
+    if (partyIsHost() && !cageActive && mouseButton===LEFT)
     {
         rectOrigin = [mouseX, mouseY];
         drawingRectangle = true;
         console.log("drawing rectangle = " + drawingRectangle);
+    }
+
+    if (partyIsHost() && cageActive && mouseButton===RIGHT)
+    {
+        rightClicking = true;
+        let randomAngle = Math.PI * 2 * Math.random()
+        rightClickPosition = [mouseX + 100 * Math.cos(randomAngle), mouseY + 100 * sin(randomAngle)]
     }
 }
 
