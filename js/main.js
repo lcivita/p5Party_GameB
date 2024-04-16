@@ -35,7 +35,7 @@ function setup() {
     canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault())
 
     let button = createButton('connect');
-    button.position(0, height);
+    button.position(0, 0);
     button.mousePressed(connectToParty);
     cursorIcon = loadImage("icons/cursoricon.svg")
     folderIcon = loadImage("icons/foldericon.svg")
@@ -47,11 +47,15 @@ function draw() {
     background(0);
     
     if (!connected) {
+        // draw cursor before match starts
+        image(cursorIcon, mouseX, mouseY, 20, 20);
         return;
     }
     
     if (!shared.gameStarted)
     {
+        // draw cursor before match starts
+        image(cursorIcon, mouseX, mouseY, 20, 20);
         return;
     }
     
@@ -106,11 +110,13 @@ function startGame() {
 }
 
 function drawRightClickMenu() {
-    push()
-        fill(255, 0, 0, 255)
-        stroke(255)
-        rect(rightClickPosition[0], rightClickPosition[1], 20, 20);
-    pop()
+    // push()
+    //     fill(255, 0, 0, 255)
+    //     stroke(255)
+    //     rect(rightClickPosition[0], rightClickPosition[1], 20, 20);
+    // pop()
+
+    displayMenu(menuPos, hoveredOption);
 }
 
 function hostDraw()
@@ -214,7 +220,7 @@ function drawCursor()
 {
     // TODO replace circle with cursor
     //circle(shared.cursorPosition[0], shared.cursorPosition[1], 10);
-    image(cursorIcon, shared.cursorPosition[0], shared.cursorPosition[1], 20, 20)
+    image(cursorIcon, shared.cursorPosition[0], shared.cursorPosition[1], 20, 20);
 }
 
 function createCage()

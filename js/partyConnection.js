@@ -1,5 +1,5 @@
 
-const appName = "nikita_leo_lu_GameB_Week1_EDITED";
+const appName = "nikita_leo_lu_GameB_Week2";
 const roomName = "test";
 
 let me, guests;
@@ -31,7 +31,7 @@ function onConnect() {
     if (partyIsHost())
     {
         let button2 = createButton('(host) start game');
-        button2.position(width/2, height);
+        button2.position(button2.width, 0);
         button2.mousePressed(startGame);
     }
         

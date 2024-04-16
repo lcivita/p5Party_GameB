@@ -39,6 +39,10 @@ function moveInput()
 
 function mousePressed()
 {
+    if (!connected) {
+        return;
+    }
+    
     if(mouseButton === LEFT) {
         if(rightClicking == true) {
             if(Math.sqrt(Math.pow(mouseX - rightClickPosition[0],2) + Math.pow(mouseY - rightClickPosition[1], 2)) < 20) {
@@ -59,10 +63,14 @@ function mousePressed()
         rightClicking = true;
         let randomAngle = Math.PI * 2 * Math.random()
         rightClickPosition = [mouseX + 100 * Math.cos(randomAngle), mouseY + 100 * sin(randomAngle)]
+        randomizeMenuOrder();
+        menuPos.x = mouseX;
+        menuPos.y = mouseY;
     }
 }
 
 function mouseDragged() {
+    
     if (drawingRectangle) {
         curRectX = constrain(mouseX - rectOrigin[0], -width/3, width/3);
         curRectY = constrain(mouseY - rectOrigin[1], -width/3, width/3);
@@ -71,6 +79,9 @@ function mouseDragged() {
 
 function mouseReleased()
 {
+    if (!connected) {
+        return;
+    }
     if (partyIsHost() && drawingRectangle)
     {
         createCage();
