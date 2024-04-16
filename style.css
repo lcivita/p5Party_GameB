@@ -1,7 +1,47 @@
 html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: "input-mono", monospace;
+    font-weight: 400;
+    font-style: normal;
+    overflow: hidden;
 }
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('imgs/bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+
+/*body {*/
+/*    background-image: url('imgs/bg.jpg');  !* Sets the background image *!*/
+/*    background-position: center;  !* Centers the background image *!*/
+/*    background-size: auto;  !* Keeps the image at its original size *!*/
+/*    background-repeat: no-repeat;  !* Prevents the image from repeating *!*/
+/*    display: flex;*/
+/*    justify-content: center;  !* Centers content horizontally *!*/
+/*    align-items: center;  !* Centers content vertically *!*/
+/*}*/
+
 canvas {
     display: block;
+    margin: auto;
+    z-index: 1000;
+}
+
+html {
+    background: black;
 }
