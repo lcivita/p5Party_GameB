@@ -1,5 +1,5 @@
 
-const appName = "nikita_leo_lu_GameB_Week2";
+const appName = "nikita_leo_lu_GameB_Week2_change_B";
 const roomName = "test";
 
 let me, guests;
@@ -15,9 +15,11 @@ function connectToParty()
             filePositions: [],
             selectedUsers: [],
             deletedUsers: [],
+            boostAvailable: [],
             gameStarted: false,
             cage: [0, 0, 0, 0],
-            cageActive: false
+            cageActive: false,
+            backgroundImage:0
         },
         onConnect
     );
@@ -30,9 +32,11 @@ function connectToParty()
 function onConnect() {
     if (partyIsHost())
     {
+        /*
         let button2 = createButton('(host) start game');
         button2.position(button2.width, 0);
         button2.mousePressed(startGame);
+        */
     }
         
         // Delay by 0.2 seconds
@@ -41,7 +45,7 @@ function onConnect() {
         connected = true;
         shared.selectedUsers[parseInt(me.role_keeper.role)] = false;
         shared.deletedUsers[parseInt(me.role_keeper.role)] = false;
-
+        shared.boostAvailable[parseInt(me.role_keeper.role)] = 0;
         subscribePartyEvents();
 
 

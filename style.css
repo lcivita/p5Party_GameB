@@ -19,7 +19,7 @@ html, body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('imgs/bg.jpg');
+    background-image: url('imgs/bg2.jpg');
     background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
@@ -29,6 +29,9 @@ canvas {
     display: block;
     margin: auto;
     z-index: 1000;
+    width: 800px !important;
+    height: auto !important;
+    border: 3px solid rgb(203, 203, 203);
 }
 
 html {
@@ -44,4 +47,21 @@ button:hover {
     background: white;
     color: black;
     border: solid white 2px;
+}
+
+main {
+    position: relative;
+}
+
+.connectButton {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translate(-30%, -20%);
+    background-color: rgb(237, 237, 237);
+    border: 0px;
+}
+
+.connectButton img {
+    height: 20px;
 }

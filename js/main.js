@@ -13,8 +13,9 @@ let curRectY = 0;
 
 let cageActive = false;
 let cageTimer = 0;
-let canvasWidth = 800;
-let canvasHeight = 600;
+let subResolution = 7
+let canvasWidth = Math.round(800/subResolution);
+let canvasHeight = Math.round(600/subResolution);
 const cageActiveTime = 1;
 
 let rightClicking = false;
@@ -30,49 +31,84 @@ let curCage = {
 let cursorIcon;
 let folderIcon
 
+let backImages = []
+let myColors = ["#e3a21a", "#00a300", "#7e3878", "#2d89ef", "#ffc40d", "#00aba9", "#99b433"];
+
+
 function setup() {
     const canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault())
-
-    let button = createButton('connect');
-    button.position(0, 0);
-    button.mousePressed(connectToParty);
+    noSmooth();
     cursorIcon = loadImage("icons/cursoricon.svg")
     folderIcon = loadImage("icons/foldericon.svg")
+
+
+    backImage = loadImage("imgs/bg1.png")
+    backImage2 = loadImage("imgs/bg2.png")
+    backImage3 = loadImage("imgs/bg3.png")
+    backImages = [backImage, backImage2, backImage3];
     noCursor()
     ellipseMode(CENTER);
 }
 
+
+function drawDesktop() {
+    push()
+    rect()
+    pop()
+}
+
 function draw() {
-    background(0);
-    
+
     if (!connected) {
+        background("#000000");
         // draw cursor before match starts
-        image(cursorIcon, mouseX, mouseY, 20, 20);
+        image(cursorIcon, mouseX, mouseY, 3, 3);
         return;
     }
+    
     
     if (!shared.gameStarted)
     {
+        background("#222222");
+
         // draw cursor before match starts
-        image(cursorIcon, mouseX, mouseY, 20, 20);
+
+        if(partyIsHost()) {
+
+            
+            for(let i = 0; i < 3; i++) {
+                push()
+                    if(shared.backgroundImage == i) {
+                        rectMode(CENTER)
+                        stroke(0, 255, 255)
+                        rect(canvasWidth * 0.25 * (i + 1), canvasHeight/2, canvasWidth/5, canvasHeight/5)
+                    }
+                    imageMode(CENTER)
+                    image(backImages[i], canvasWidth * 0.25 * (i + 1), canvasHeight/2, canvasWidth/5, canvasHeight/5)
+                pop()
+            }
+            push()
+            rectMode(CENTER)
+            rect(canvasWidth/2, canvasHeight/5 * 4, 100, 10)
+            textAlign(CENTER)
+            textSize(5)
+            text("start", canvasWidth/2,  canvasHeight/5 * 4)
+            image(cursorIcon, mouseX, mouseY, 3, 3);
+            pop()
+        }
+
         return;
     }
-    
+    background("#006e6d");
+    push()
+        imageMode(CENTER)
+        image(backImages[shared.backgroundImage], canvasWidth/2, canvasHeight/2, canvasWidth, canvasHeight)
+    pop()
+
     if (guests.length > maxGuestsLength) {
         maxGuestsLength = guests.length;
     }
-    if (partyIsHost())
-    {
-        hostDraw();
-    }
-    else
-    {
-        clientDraw();
-    }
-
-    drawAllFiles();
-    drawCursor();
 
     if (cageActive)
     {
@@ -94,6 +130,19 @@ function draw() {
 
     if(!partyIsHost() && shared.cageActive) {
         drawCage()
+    }
+
+
+    drawAllFiles();
+    drawCursor();
+
+    if (partyIsHost())
+    {
+        hostDraw();
+    }
+    else
+    {
+        clientDraw();
     }
     
 }
@@ -169,7 +218,6 @@ function clientDraw()
 
 function drawAllFiles()
 {
-    
     for (let i = 1; i < maxGuestsLength; i++)
     {
         // TODO replace circle with file icon. Make array and have your file type be linked to your role
@@ -177,10 +225,10 @@ function drawAllFiles()
         {
             let currentUserRole = parseInt(guests[i].role_keeper.role); 
             let currentUserPosition = shared.filePositions[currentUserRole]
+
             if(connected && partyIsHost()) {
                 
                 if((abs(currentUserPosition[0] - rectOrigin[0]) < abs(curCage.width)) && (abs(currentUserPosition[1] - rectOrigin[1]) < abs(curCage.height)) && cageActive) {
-                    
                     shared.selectedUsers[currentUserRole] = true
                     if(deleting) {
                         shared.deletedUsers[currentUserRole] = true
@@ -191,36 +239,33 @@ function drawAllFiles()
 
             }
             push()
+
             if(shared.selectedUsers[currentUserRole]) {
-                //fill(255, 0, 0, 255)
                 tint('red')
-
             } else {
-                //fill(255, 255, 0, 255)
-                tint('green')
-
+                tint(myColors[i])
             }
+
             imageMode(CENTER);
 
             if(!shared.deletedUsers[currentUserRole]) {
-                //circle(currentUserPosition[0], currentUserPosition[1], 20);
-
-                image(folderIcon, currentUserPosition[0], currentUserPosition[1], 20, 20)
+                image(folderIcon, currentUserPosition[0], currentUserPosition[1], 4, 4)
             }
             pop()
         } catch
         {
             
         }
-        deleting = false;
     }
+    deleting = false;
+
 }
 
 function drawCursor()
 {
     // TODO replace circle with cursor
     //circle(shared.cursorPosition[0], shared.cursorPosition[1], 10);
-    image(cursorIcon, shared.cursorPosition[0], shared.cursorPosition[1], 20, 20);
+    image(cursorIcon, shared.cursorPosition[0], shared.cursorPosition[1], 3, 3);
 }
 
 function createCage()

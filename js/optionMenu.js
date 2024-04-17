@@ -22,11 +22,11 @@ function randomizeMenuOrder() {
         menuOptions[randomIdx] = tempVal;
     }
 }
+const padding = 1;
+const lineHeight = 3;
+const rectHeight = lineHeight + padding * 2;
 
 function displayMenu(pos, hoveredOption) {
-    const padding = 4;
-    const lineHeight = 10;
-    const rectHeight = lineHeight + padding * 2;
 
     let maxTextWidth = 0;
     for (let i = 0; i < menuOptions.length; i++) {
@@ -35,7 +35,6 @@ function displayMenu(pos, hoveredOption) {
             maxTextWidth = currentTextWidth;
         }
     }
-
     for (let i = 0; i < menuOptions.length; i++) {
         const x = menuPos.x;
         const y = menuPos.y + i * rectHeight;
@@ -45,11 +44,16 @@ function displayMenu(pos, hoveredOption) {
             rect(x, y, maxTextWidth, rectHeight);
             fill(255);
         } else {
-            fill(255);
+            fill(255);  
             rect(x, y, maxTextWidth, rectHeight);
             fill(0);
         }
-        noStroke();
+
+        if(menuOptions[i] == "delete") {
+            fill(255, 0, 0)
+        }
+        textSize(2.5)
+        noStroke()
         text(menuOptions[i], x + padding, y + padding + (rectHeight - lineHeight));
     }
 }
@@ -60,9 +64,6 @@ function mouseMoved() {
 }
 
 function getHoveredOption(x, y) {
-    const padding = 4;
-    const lineHeight = 10;
-    const rectHeight = lineHeight + padding * 2;
     let maxTextWidth = 0;
     for (let option of menuOptions) {
         const currentTextWidth = textWidth(option) + padding * 2;
@@ -70,7 +71,6 @@ function getHoveredOption(x, y) {
             maxTextWidth = currentTextWidth;
         }
     }
-
     for (let i = 0; i < menuOptions.length; i++) {
         const rectX = menuPos.x;
         const rectY = menuPos.y + i * rectHeight;
