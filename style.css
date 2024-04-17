@@ -26,6 +26,7 @@ html, body {
 }
 
 canvas {
+    image-rendering: pixelated;
     display: block;
     margin: auto;
     z-index: 1000;

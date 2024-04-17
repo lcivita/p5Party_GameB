@@ -13,7 +13,7 @@ let curRectY = 0;
 
 let cageActive = false;
 let cageTimer = 0;
-let subResolution = 7
+let subResolution = 7;
 let canvasWidth = Math.round(800/subResolution);
 let canvasHeight = Math.round(600/subResolution);
 const cageActiveTime = 1;
@@ -34,10 +34,12 @@ let folderIcon
 let backImages = []
 let myColors = ["#e3a21a", "#00a300", "#7e3878", "#2d89ef", "#ffc40d", "#00aba9", "#99b433"];
 
+let canvas;
+let ctx;
 
 function setup() {
-    const canvas = createCanvas(canvasWidth, canvasHeight);
-    canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault())
+    canvas = createCanvas(canvasWidth, canvasHeight);
+    canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     noSmooth();
     cursorIcon = loadImage("icons/cursoricon.svg")
     folderIcon = loadImage("icons/foldericon.svg")
