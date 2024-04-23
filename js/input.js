@@ -18,7 +18,7 @@ function moveInput()
     let input = [0,0];
     let speed = 0.2;
 
-    let boost = 2.0;
+    // let boost = 2.0;
     if (keyIsDown(W)) input[1]--; // UP
     if (keyIsDown(S)) input[1]++; // DOWN
     if (keyIsDown(D)) input[0]++; // RIGHT
@@ -31,26 +31,26 @@ function moveInput()
         input[1] /= magnitude;
     }
 
-    input[0] *= speed;
-    input[1] *= speed;
-
-    
-    if(keyIsDown(SHIFT) && millis() > shared.boostAvailable[parseInt(me.role_keeper.role)] + 5000) {
-
-
-        
-        input[0] *= boost;
-        input[1] *= boost;
-        /*
-        if(millis() - shared.boostAvailable[parseInt(me.role_keeper.role)]  > 3000) {
-            shared.boostAvailable[parseInt(me.role_keeper.role)] = millis()
-
-        }
-        */
+    if (!boosting)
+    {
+        input[0] *= speed;
+        input[1] *= speed;
+    }
+    else
+    {
+        input[0] *= speed * boost;
+        input[1] *= speed * boost;
     }
 
-
     return input;
+}
+
+function keyPressed() {
+    if (!partyIsHost()) {
+        if (keyCode === SHIFT) {
+            tryBoost();
+        }
+    }
 }
 
 function mousePressed()
@@ -61,12 +61,6 @@ function mousePressed()
     
     if(mouseButton === LEFT) {
         if(rightClicking == true) {
-            /*
-            if(Math.sqrt(Math.pow(mouseX - rightClickPosition[0],2) + Math.pow(mouseY - rightClickPosition[1], 2)) < 20) {
-                deleting = true;
-            } 
-            */
-
             currentlyHovering = menuOptions[getHoveredOption(mouseX, mouseY)]
             if(currentlyHovering == "delete") {
                 deleting = true;

@@ -33,6 +33,10 @@ canvas {
     width: 800px !important;
     height: auto !important;
     border: 3px solid rgb(203, 203, 203);
+    cursor: none;
+}
+canvas:hover {
+    cursor: none;
 }
 
 html {

@@ -1,7 +1,7 @@
 let playerPos = [0,0];
 let lastPlayerPos = [0,0];
 
-const fileMoveSpeed = 200;
+const fileMoveSpeed = 80;
 
 let maxGuestsLength = 0;
 
@@ -29,7 +29,8 @@ let curCage = {
 };
 
 let cursorIcon;
-let folderIcon
+let folderIcon;
+let fileIcon;
 
 let backImages = []
 let myColors = ["#e3a21a", "#00a300", "#7e3878", "#2d89ef", "#ffc40d", "#00aba9", "#99b433"];
@@ -43,21 +44,22 @@ function setup() {
     noSmooth();
     cursorIcon = loadImage("icons/cursoricon.svg")
     folderIcon = loadImage("icons/foldericon.svg")
+    fileIcon = loadImage("imgs/file.png");
 
 
     backImage = loadImage("imgs/bg1.png")
     backImage2 = loadImage("imgs/bg2.png")
     backImage3 = loadImage("imgs/bg3.png")
     backImages = [backImage, backImage2, backImage3];
-    noCursor()
+    noCursor();
     ellipseMode(CENTER);
 }
 
 
 function drawDesktop() {
-    push()
-    rect()
-    pop()
+    push();
+    rect();
+    pop();
 }
 
 function draw() {
@@ -88,16 +90,16 @@ function draw() {
                     }
                     imageMode(CENTER)
                     image(backImages[i], canvasWidth * 0.25 * (i + 1), canvasHeight/2, canvasWidth/5, canvasHeight/5)
-                pop()
+                pop();
             }
-            push()
-            rectMode(CENTER)
-            rect(canvasWidth/2, canvasHeight/5 * 4, 100, 10)
-            textAlign(CENTER)
-            textSize(5)
-            text("start", canvasWidth/2,  canvasHeight/5 * 4)
+            push();
+            rectMode(CENTER);
+            rect(canvasWidth/2, canvasHeight/5 * 4, 100, 10);
+            textAlign(CENTER);
+            textSize(5);
+            text("start", canvasWidth/2,  canvasHeight/5 * 4);
             image(cursorIcon, mouseX, mouseY, 3, 3);
-            pop()
+            pop();
         }
 
         return;
@@ -174,13 +176,17 @@ function hostDraw()
 {
     updateSharedCursorPos();
     
+    drawFileBoost();
+
+    boostEatenCheck();
+    
     if (drawingRectangle)
     {
         push();
         fill(255, 255, 255, 10);
         stroke(255);
         rect(rectOrigin[0], rectOrigin[1], curRectX, curRectY);
-        updateSharedRectanglePos()
+        updateSharedRectanglePos();
         pop();
     }
     if(rightClicking) {
@@ -204,6 +210,13 @@ function updateSharedFilePos(data)
 
 function clientDraw()
 {
+    drawFileBoost();
+    displayAvailableBoost();
+    
+    
+    if (boosting && millis() > boostStartTime + boostLength) {
+        boosting = false;
+    }
 
     for (let i = 0; i < 2; i++) {
         playerPos[i] += moveInput()[i] * deltaTime * fileMoveSpeed / 1000;
@@ -215,6 +228,8 @@ function clientDraw()
     }
 
     lastPlayerPos = playerPos.slice();
+    
+    // console.log("boosts available = " + boostsAvailable);
 }
 
 
@@ -226,7 +241,7 @@ function drawAllFiles()
         try
         {
             let currentUserRole = parseInt(guests[i].role_keeper.role); 
-            let currentUserPosition = shared.filePositions[currentUserRole]
+            let currentUserPosition = shared.filePositions[currentUserRole];
 
             if(connected && partyIsHost()) {
                 
@@ -282,3 +297,4 @@ function createCage()
     shared.cage = [curCage.x, curCage.y, curCage.width, curCage.height]
     shared.cageActive = true
 }
+

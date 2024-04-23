@@ -32,6 +32,7 @@ function connectToParty()
 function onConnect() {
     if (partyIsHost())
     {
+        randomizeFilePos();
         /*
         let button2 = createButton('(host) start game');
         button2.position(button2.width, 0);
@@ -51,6 +52,7 @@ function onConnect() {
 
         if (!partyIsHost()) {
             playerPos = [width - 20, 20 + me.role_keeper.role * height/16 - height/16];
+            partySubscribe("fileEaten", tryAddCharge);
         }
     }, 200);
 }
