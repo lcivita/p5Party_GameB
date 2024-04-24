@@ -28,6 +28,9 @@ let curCage = {
     height: 0
 };
 
+
+let timerBase = 0;
+
 let cursorIcon;
 let folderIcon;
 let fileIcon;
@@ -38,20 +41,32 @@ let myColors = ["#e3a21a", "#00a300", "#7e3878", "#2d89ef", "#ffc40d", "#00aba9"
 let canvas;
 let ctx;
 
+
+let timerSet = false
+
 function setup() {
     canvas = createCanvas(canvasWidth, canvasHeight);
+    canvas.parent("div-container");
+    noCursor();
+
     canvas.elt.addEventListener("contextmenu", (e) => e.preventDefault());
     noSmooth();
     cursorIcon = loadImage("icons/cursoricon.svg")
     folderIcon = loadImage("icons/foldericon.svg")
     fileIcon = loadImage("imgs/file.png");
 
+    bsodImageLoser = loadImage("imgs/bsod_loser.png")
+    bsodImageWinner = loadImage("imgs/bsod_winner.png")
+
+    cleanImageLoser = loadImage("imgs/clean_loser.png")
+    cleanImageWinner = loadImage("imgs/clean_winner.png")
+
 
     backImage = loadImage("imgs/bg1.png")
     backImage2 = loadImage("imgs/bg2.png")
     backImage3 = loadImage("imgs/bg3.png")
     backImages = [backImage, backImage2, backImage3];
-    noCursor();
+
     ellipseMode(CENTER);
 }
 
@@ -138,7 +153,6 @@ function draw() {
 
 
     drawAllFiles();
-    drawCursor();
 
     if (partyIsHost())
     {
@@ -148,7 +162,8 @@ function draw() {
     {
         clientDraw();
     }
-    
+    drawCursor();
+
 }
 
 function drawCage() {
@@ -160,6 +175,7 @@ function drawCage() {
 }
 function startGame() {
     shared.gameStarted = true;
+
 }
 
 function drawRightClickMenu() {
@@ -172,14 +188,70 @@ function drawRightClickMenu() {
     displayMenu(menuPos, hoveredOption);
 }
 
+
+function gameWonByFiles() {
+    push()
+    imageMode(CENTER);
+    if(partyIsHost()) {
+        image(bsodImageLoser, canvasWidth/2, canvasHeight/2, canvasWidth, canvasHeight);
+
+    } else {
+        image(bsodImageWinner, canvasWidth/2, canvasHeight/2, canvasWidth, canvasHeight);
+    }
+
+    pop()
+}
+
+function gameWonByCursor() {
+    push()
+    imageMode(CENTER);
+
+    if(partyIsHost()) {
+        image(cleanImageWinner, canvasWidth/2, canvasHeight/2, canvasWidth/2, canvasHeight/3)
+    } else {
+        image(cleanImageLoser, canvasWidth/2, canvasHeight/2, canvasWidth/2, canvasHeight/3)
+    }
+
+
+    pop()
+}
+
+function drawTimer() {
+    push()
+    rectMode(CORNER);
+    stroke(1)
+    strokeWeight(1)
+    noFill()
+    let maxTimer = Math.min((shared.timer/shared.matchTimer), 1.0)
+    rect(canvasWidth/5, canvasHeight/15, 3 * canvasWidth/5, canvasHeight/30)
+    fill(6 + maxTimer * 255, 0, 171 * (1.0-maxTimer));
+    rect(canvasWidth/5, canvasHeight/15,  (1.0 - maxTimer) * 3 * canvasWidth/5, canvasHeight/30 )
+    pop()
+}
+
 function hostDraw()
 {
     updateSharedCursorPos();
-    
-    drawFileBoost();
 
-    boostEatenCheck();
+    if(!timerSet) {
+        timerBase = millis()
+        timerSet = true;
+        console.log(millis()-timerBase)
+    }
+
+    shared.timer = millis()-timerBase;
     
+    if(shared.timer > shared.matchTimer) {
+        if(!checkDeleted()) {
+            console.log("ABC")
+            shared.gameEnded = 2
+        } 
+    }
+
+
+    drawFileBoost();
+    boostEatenCheck();
+    drawTimer();
     if (drawingRectangle)
     {
         push();
@@ -191,6 +263,13 @@ function hostDraw()
     }
     if(rightClicking) {
         drawRightClickMenu();
+    }
+
+    if(shared.gameEnded == 1) {
+        gameWonByCursor()
+    }
+    if(shared.gameEnded == 2) {
+        gameWonByFiles()
     }
 }
 
@@ -212,7 +291,7 @@ function clientDraw()
 {
     drawFileBoost();
     displayAvailableBoost();
-    
+    drawTimer()
     
     if (boosting && millis() > boostStartTime + boostLength) {
         boosting = false;
@@ -230,9 +309,26 @@ function clientDraw()
     lastPlayerPos = playerPos.slice();
     
     // console.log("boosts available = " + boostsAvailable);
+
+    if(shared.gameEnded == 1) {
+        gameWonByCursor()
+    }
+
+    if(shared.gameEnded == 2) {
+        gameWonByFiles()
+    }
 }
 
 
+
+function checkDeleted() {
+    let trueCount = shared.deletedUsers.filter(item => item === true).length;
+    if(trueCount == maxGuestsLength-1) {
+        shared.gameEnded = 1
+        return true
+    } 
+    return false
+}
 function drawAllFiles()
 {
     for (let i = 1; i < maxGuestsLength; i++)
@@ -249,6 +345,8 @@ function drawAllFiles()
                     shared.selectedUsers[currentUserRole] = true
                     if(deleting) {
                         shared.deletedUsers[currentUserRole] = true
+                        checkDeleted()
+
                     }
                 } else {
                     shared.selectedUsers[currentUserRole] = false

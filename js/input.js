@@ -55,6 +55,8 @@ function keyPressed() {
 
 function mousePressed()
 {
+
+    
     if (!connected) {
         return;
     }
@@ -70,7 +72,6 @@ function mousePressed()
 
         backgroundPositions = [0.25, 0.5, 0.75]
         if(!shared.gameStarted) {
-
             for(let i =0; i < 3; i++) {
                 if((canvasWidth/5 > abs(canvasWidth * 0.25 * (i + 1) - mouseX)) && (canvasHeight/5 > abs(canvasHeight/2 - mouseY))) {
                     shared.backgroundImage = i
@@ -84,6 +85,10 @@ function mousePressed()
     }
 
 
+    if(partyIsHost() && mouseButton===LEFT && shared.gameEnded > 0) {
+        window.location.reload();
+
+    }
    
     if (partyIsHost() && !cageActive && mouseButton===LEFT)
     {

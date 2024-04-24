@@ -19,7 +19,10 @@ function connectToParty()
             gameStarted: false,
             cage: [0, 0, 0, 0],
             cageActive: false,
-            backgroundImage:0
+            backgroundImage:0,
+            gameEnded: -1,
+            timer: 0,
+            matchTimer: 10000
         },
         onConnect
     );
