@@ -1,7 +1,7 @@
 let playerPos = [0,0];
 let lastPlayerPos = [0,0];
 
-const fileMoveSpeed = 80;
+const fileMoveSpeed = 90;
 
 let maxGuestsLength = 0;
 
@@ -16,7 +16,7 @@ let cageTimer = 0;
 let subResolution = 7;
 let canvasWidth = Math.round(800/subResolution);
 let canvasHeight = Math.round(600/subResolution);
-const cageActiveTime = 1;
+const cageActiveTime = 100;
 
 let rightClicking = false;
 let rightClickPosition = [0, 0]
@@ -95,6 +95,7 @@ function draw() {
 
         if(partyIsHost()) {
 
+            drawCursorInstructions();
             
             for(let i = 0; i < 3; i++) {
                 push()
@@ -115,6 +116,10 @@ function draw() {
             text("start", canvasWidth/2,  canvasHeight/5 * 4);
             image(cursorIcon, mouseX, mouseY, 3, 3);
             pop();
+        }
+        else
+        {
+            drawFolderInstructions();
         }
 
         return;
@@ -396,3 +401,29 @@ function createCage()
     shared.cageActive = true
 }
 
+function drawCursorInstructions() {
+    push();
+    textSize(6);
+    fill(255);
+    textAlign(CENTER);
+    text("You are the cursor. Drag to select. Right click and DELETE!", width / 4, height / 10, width / 2);
+
+    textSize(4);
+
+    text(guests.length + " player" + (guests.length > 1 ? "s" : "") + " in lobby", width / 8, 3 * height / 4.6, 3 * width / 4);
+    
+    pop();
+}
+
+function drawFolderInstructions() {
+    push();
+    textSize(6);
+    fill(255);
+    textAlign(CENTER);
+    text("You are a folder. Move with WASD and boost with SHIFT. Your user is trying to DELETE you!", width / 8, height / 4, 3 * width / 4);
+
+    textSize(4);
+    text("waiting for host to start", width / 8, 3 * height / 4, 3 * width / 4);
+    
+    pop();
+}

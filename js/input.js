@@ -70,8 +70,9 @@ function mousePressed()
             rightClicking = false;
         }
 
+        
         backgroundPositions = [0.25, 0.5, 0.75]
-        if(!shared.gameStarted) {
+        if(!shared.gameStarted && partyIsHost()) {
             for(let i =0; i < 3; i++) {
                 if((canvasWidth/5 > abs(canvasWidth * 0.25 * (i + 1) - mouseX)) && (canvasHeight/5 > abs(canvasHeight/2 - mouseY))) {
                     shared.backgroundImage = i
@@ -90,7 +91,7 @@ function mousePressed()
 
     }
    
-    if (partyIsHost() && !cageActive && mouseButton===LEFT)
+    if (partyIsHost() && mouseButton===LEFT && !deleting)
     {
         rectOrigin = [mouseX, mouseY];
         drawingRectangle = true;

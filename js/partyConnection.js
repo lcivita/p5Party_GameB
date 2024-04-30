@@ -22,7 +22,7 @@ function connectToParty()
             backgroundImage:0,
             gameEnded: -1,
             timer: 0,
-            matchTimer: 10000
+            matchTimer: 30000
         },
         onConnect
     );
