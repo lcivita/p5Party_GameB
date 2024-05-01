@@ -52,6 +52,7 @@ button:hover {
     background: white;
     color: black;
     border: solid white 2px;
+    cursor: pointer;
 }
 
 main {
