@@ -60,11 +60,12 @@ main {
 
 .connectButton {
     position: absolute;
-    bottom: -30px;
-    left: 50%;
+    bottom: -100px;
+    left: 82%;
     transform: translate(-30%, -20%);
     background-color: rgb(237, 237, 237);
     border: 0px;
+    border-radius: 100px;
 }
 
 .connectButton img {
