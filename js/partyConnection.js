@@ -1,5 +1,5 @@
 
-const appName = "nikita_leo_lu_GameB_Week2_change_B";
+const appName = "nikita_leo_lu_GameB_Final";
 const roomName = "test";
 
 let me, guests;
